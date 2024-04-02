@@ -92,6 +92,7 @@ namespace cs2_rockthevote
                 case VoteResultEnum.VotesReached:
                     Server.PrintToChatAll($"{_localizer.LocalizeWithPrefix("rtv.rocked-the-vote", player.PlayerName)} {_localizer.Localize("general.votes-needed", result.VoteCount, result.RequiredVotes)}");
                     Server.PrintToChatAll(_localizer.LocalizeWithPrefix("rtv.votes-reached"));
+                    _pluginState.RTVReached();
                     _endmapVoteManager.StartVote(_config);
                     break;
             }

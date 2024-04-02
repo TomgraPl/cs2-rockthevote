@@ -1,8 +1,10 @@
 ﻿using CounterStrikeSharp.API;
 using CounterStrikeSharp.API.Core;
 using CounterStrikeSharp.API.Core.Attributes.Registration;
+using CounterStrikeSharp.API.Core.Capabilities;
 using cs2_rockthevote.Features;
 using Microsoft.Extensions.DependencyInjection;
+using RTVapi;
 using static CounterStrikeSharp.API.Core.Listeners;
 
 namespace cs2_rockthevote
@@ -56,10 +58,14 @@ namespace cs2_rockthevote
         public string Localize(string prefix, string key, params object[] values)
         {
             return $"{Localizer[prefix]} {Localizer[key, values]}";
-        }
-        public override void Load(bool hotReload)
-        {
-            _dependencyManager.OnPluginLoad(this);
+		}
+
+		private readonly PluginCapability<iRTVapi> _pluginCapability = new("RTV:Api");
+		public Api Api { get; set; } = null!;
+		public override void Load(bool hotReload) {
+			Api = new();
+			Capabilities.RegisterPluginCapability(_pluginCapability, () => Api);
+			_dependencyManager.OnPluginLoad(this);
             RegisterListener<OnMapStart>(_dependencyManager.OnMapStart);
         }
 
